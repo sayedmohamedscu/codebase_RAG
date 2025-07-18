@@ -1,0 +1,25 @@
+[project]
+name = "ultralytics-code-assistant"
+version = "0.1.0"
+description = "A RAG-based code assistant for the Ultralytics YOLO codebase."
+authors = [{ name = "Your Name", email = "your@email.com" }]
+license = { text = "MIT" }
+requires-python = ">=3.9"
+
+dependencies = [
+    "gradio==4.31.5",
+    "requests==2.31.0",
+    "sentence-transformers==2.7.0",
+    "faiss-cpu==1.8.0",  # Use faiss-gpu if a GPU is available
+    "numpy==1.26.4",
+    "torch==2.3.0",
+    "uv==0.1.41"
+]
+
+[project.readme]
+file = "README.md"
+content-type = "text/markdown"
+
+# CORRECTED SECTION
+[tool.uv.sources]
+pypi = { url = "https://pypi.org/simple" }
