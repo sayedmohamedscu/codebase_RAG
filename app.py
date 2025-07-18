@@ -163,18 +163,7 @@ with gr.Blocks(theme=gr.themes.Soft(), title="RAG Code Assistant") as demo:
         inputs=[api_key_input, api_url_input, llm_model_input, top_k_input, user_query_input],
         outputs=output_text
     )
-    
-    gr.Examples(
-        examples=[
-            [
-                "When I use cache=True in classification training, the RAM usage increases with every epoch and crashes. Why?",
-            ],
-            [
-                "How does the autobatch function work?",
-            ]
-        ],
-        inputs=user_query_input
-    )
+
 
 
 if __name__ == "__main__":
