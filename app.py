@@ -132,21 +132,16 @@ with gr.Blocks(theme=gr.themes.Soft(), title="RAG Code Assistant") as demo:
                 type="password",
                 placeholder="Enter your API key here"
             )
-            # New input field for the API URL
             api_url_input = gr.Textbox(
                 label="API Endpoint URL",
                 value="https://openrouter.ai/api/v1/chat/completions",
                 placeholder="Enter the chat completions endpoint URL"
             )
-            llm_model_input = gr.Dropdown(
-                label="Select LLM Model",
-                choices=[
-                    "moonshotai/kimi-k2:free",
-                    "mistralai/devstral-small-2505:free",
-                    "qwen/qwen3-235b-a22b:free",
-                    "deepseek/deepseek-chat-v3-0324:free",
-                ],
-                value="moonshotai/kimi-k2:free"
+            # Changed from gr.Dropdown to gr.Textbox
+            llm_model_input = gr.Textbox(
+                label="LLM Model Name",
+                value="mistralai/mistral-7b-instruct:free",
+                placeholder="e.g., mistralai/mistral-7b-instruct:free"
             )
             user_query_input = gr.Textbox(
                 label="Your Question / Bug Report",
