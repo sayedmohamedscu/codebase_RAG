@@ -137,8 +137,8 @@ with gr.Blocks(theme=gr.themes.Soft(), title="RAG Code Assistant") as demo:
             )
             llm_model_input = gr.Textbox(
                 label="LLM Model Name",
-                value="mistralai/mistral-7b-instruct:free",
-                placeholder="e.g., mistralai/mistral-7b-instruct:free"
+                value="moonshotai/kimi-k2:free",
+                placeholder="e.g., moonshotai/kimi-k2:free"
             )
             # New Dropdown for Top-K selection
             top_k_input = gr.Dropdown(
