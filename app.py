@@ -49,12 +49,12 @@ else:
 print("--- Initialization Complete ---")
 
 
-def get_expert_analysis(api_key, llm_model_name, user_query):
+def get_expert_analysis(api_key, api_url, llm_model_name, user_query):
     """
     The main function that orchestrates the RAG pipeline.
     """
-    if not all([api_key, llm_model_name, user_query]):
-        return "Error: API Key, Model Name, and Question are all required."
+    if not all([api_key, api_url, llm_model_name, user_query]):
+        return "Error: API Key, API URL, Model Name, and Question are all required."
 
     if index is None:
         return "Error: FAISS index and data could not be loaded. Please check the console for errors and restart."
@@ -73,9 +73,7 @@ def get_expert_analysis(api_key, llm_model_name, user_query):
     if not retrieved_results:
         return "Could not find any relevant code chunks for your query. Please try rephrasing it."
 
-
-
-    context_str=print_results(retrieved_results)
+    context_str = print_results(retrieved_results)
     
     print("--- Starting Generation ---")
     final_user_prompt = f"""
@@ -101,20 +99,22 @@ Based on the provided code context, here is the analysis of your question:
     }
 
     try:
-        print(f"Sending request to LLM: {llm_model_name}")
-        response = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, data=json.dumps(payload))
+        print(f"Sending request to LLM: {llm_model_name} at {api_url}")
+        # Use the provided api_url from the Gradio input
+        response = requests.post(api_url, headers=headers, data=json.dumps(payload))
         response.raise_for_status()
         
         response_json = response.json()
         llm_answer = response_json['choices'][0]['message']['content']
         print("--- Generation Complete ---")
         
-        full_response = f"## Expert Analysis\n\n{llm_answer}\n\n---\n\n### Retrieved Context\n\nThis analysis was based on the following retrieved code chunks:\n\n```\n{context_str}```"
+        # Correctly format the final response to render Markdown
+        full_response = f"## Expert Analysis\n\n{llm_answer}\n\n---\n\n### Retrieved Context\n\nThis analysis was based on the following retrieved code chunks:\n\n{context_str}"
         return full_response
 
     except requests.exceptions.RequestException as e:
-        print(f"Error calling OpenRouter API: {e}")
-        return f"Error: Failed to connect to the LLM API. Please check your API key and network connection.\n\nDetails: {e}"
+        print(f"Error calling LLM API: {e}")
+        return f"Error: Failed to connect to the LLM API. Please check your API URL, API key, and network connection.\n\nDetails: {e}"
     except (KeyError, IndexError) as e:
         print(f"Error parsing LLM response: {e}")
         return f"Error: Received an unexpected response from the LLM API. Please check the model name and try again.\n\nResponse: {response.text}"
@@ -128,9 +128,15 @@ with gr.Blocks(theme=gr.themes.Soft(), title="RAG Code Assistant") as demo:
     with gr.Row():
         with gr.Column(scale=1):
             api_key_input = gr.Textbox(
-                label="OpenRouter API Key",
+                label="API Key",
                 type="password",
-                placeholder="Enter your OpenRouter API key here"
+                placeholder="Enter your API key here"
+            )
+            # New input field for the API URL
+            api_url_input = gr.Textbox(
+                label="API Endpoint URL",
+                value="https://openrouter.ai/api/v1/chat/completions",
+                placeholder="Enter the chat completions endpoint URL"
             )
             llm_model_input = gr.Dropdown(
                 label="Select LLM Model",
@@ -153,9 +159,10 @@ with gr.Blocks(theme=gr.themes.Soft(), title="RAG Code Assistant") as demo:
             gr.Markdown("## Analysis Result")
             output_text = gr.Markdown()
 
+    # Update the inputs list for the click event
     submit_button.click(
         fn=get_expert_analysis,
-        inputs=[api_key_input, llm_model_input, user_query_input],
+        inputs=[api_key_input, api_url_input, llm_model_input, user_query_input],
         outputs=output_text
     )
     
