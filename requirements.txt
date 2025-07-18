@@ -1,0 +1,6 @@
+gradio==4.31.5
+requests==2.31.0
+sentence-transformers==2.7.0
+faiss-cpu==1.8.0
+numpy==1.26.4
+torch==2.3.0
