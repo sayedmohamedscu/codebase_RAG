@@ -10,7 +10,7 @@ INDEX_PATH = "code_faiss.index"
 METADATA_PATH = "code_metadata.json"
 CHUNKS_JSON_PATH = "code_chunks.json"
 EMBEDDING_MODEL_NAME = "Qwen/Qwen3-Embedding-0.6B"
-TOP_K = 10  # Number of results to retrieve for context
+# TOP_K has been removed from here and is now a user input
 
 # --- SYSTEM PROMPT ---
 # This prompt is crucial for guiding the LLM's behavior.
@@ -49,7 +49,7 @@ else:
 print("--- Initialization Complete ---")
 
 
-def get_expert_analysis(api_key, api_url, llm_model_name, user_query):
+def get_expert_analysis(api_key, api_url, llm_model_name, top_k, user_query):
     """
     The main function that orchestrates the RAG pipeline.
     """
@@ -67,7 +67,7 @@ def get_expert_analysis(api_key, api_url, llm_model_name, user_query):
         index=index,
         metadata=metadata,
         chunks_dict=chunks_dict,
-        top_k=TOP_K
+        top_k=top_k # Use the value from the UI
     )
 
     if not retrieved_results:
@@ -100,7 +100,6 @@ Based on the provided code context, here is the analysis of your question:
 
     try:
         print(f"Sending request to LLM: {llm_model_name} at {api_url}")
-        # Use the provided api_url from the Gradio input
         response = requests.post(api_url, headers=headers, data=json.dumps(payload))
         response.raise_for_status()
         
@@ -108,7 +107,6 @@ Based on the provided code context, here is the analysis of your question:
         llm_answer = response_json['choices'][0]['message']['content']
         print("--- Generation Complete ---")
         
-        # Correctly format the final response to render Markdown
         full_response = f"## Expert Analysis\n\n{llm_answer}\n\n---\n\n### Retrieved Context\n\nThis analysis was based on the following retrieved code chunks:\n\n{context_str}"
         return full_response
 
@@ -137,11 +135,16 @@ with gr.Blocks(theme=gr.themes.Soft(), title="RAG Code Assistant") as demo:
                 value="https://openrouter.ai/api/v1/chat/completions",
                 placeholder="Enter the chat completions endpoint URL"
             )
-            # Changed from gr.Dropdown to gr.Textbox
             llm_model_input = gr.Textbox(
                 label="LLM Model Name",
-                value="moonshotai/kimi-k2:free",
-                placeholder="e.g., moonshotai/kimi-k2:free"
+                value="mistralai/mistral-7b-instruct:free",
+                placeholder="e.g., mistralai/mistral-7b-instruct:free"
+            )
+            # New Dropdown for Top-K selection
+            top_k_input = gr.Dropdown(
+                label="Number of Chunks to Retrieve (Top K)",
+                choices=[5, 6, 7, 8, 9, 10],
+                value=10,
             )
             user_query_input = gr.Textbox(
                 label="Your Question / Bug Report",
@@ -157,7 +160,7 @@ with gr.Blocks(theme=gr.themes.Soft(), title="RAG Code Assistant") as demo:
     # Update the inputs list for the click event
     submit_button.click(
         fn=get_expert_analysis,
-        inputs=[api_key_input, api_url_input, llm_model_input, user_query_input],
+        inputs=[api_key_input, api_url_input, llm_model_input, top_k_input, user_query_input],
         outputs=output_text
     )
     
