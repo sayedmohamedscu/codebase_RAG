@@ -1,9 +1,13 @@
 # codebase_RAG
+
 # LLM-Powered Ultralytics Code Assistant
 
 This project is a RAG (Retrieval-Augmented Generation) based code assistant designed to answer questions about the [Ultralytics YOLO](https://github.com/ultralytics/ultralytics) codebase. It uses a vector database to find relevant source code snippets and a Large Language Model (LLM) to generate helpful, context-aware answers.
 
+
+
 ## Core Features
+
 - **Gradio Web UI**: An intuitive chat interface for asking questions.
 - **AST-Based Code Indexing**: Intelligently chunks Python code from the YOLO repository.
 - **Local Vector Search**: Uses FAISS for fast, local similarity search to retrieve relevant code.
@@ -102,7 +106,7 @@ Here is a roadmap for improving the assistant and preparing it for a production 
 
 ### 1. Potential Improvements
 
-- **Learn From User Feedback & previous solved bugs** : Use the previous solved bugs with a RAG to match if this a relevent and solved before or could benfites from wht we already have 
+- **Learn From User Feedback & previous solved bugs** : Use the previous solved bugs with a RAG to match if this a relevent and solved before or could benfites from wht we already have
 - **Finetune the embedding model**: Finetune the embedding model based on our case for better retrival on the sel;ected codebase.
 -  **Hybrid Search**: Implement a hybrid search mechanism that combines dense vector search (for semantic meaning) with sparse keyword search (e.g., BM25). This would improve retrieval for queries containing specific, literal terms like function names (`autobatch`) or error messages that vector search might miss https://www.anthropic.com/news/contextual-retrieval.
 - **Graph-based RAG**: Model the codebase as a graph where nodes are code chunks (functions, classes) and edges represent relationships (e.g., function calls, class inheritance). When a node is retrieved, the RAG system could also fetch connected nodes, providing the LLM with a much richer context of how different parts of the code interact https://github.com/vitali87/code-graph-rag.
@@ -114,5 +118,27 @@ Here is a roadmap for improving the assistant and preparing it for a production 
 - **Managed Vector Database**: The first step would be to migrate from the local FAISS index to a scalable, managed solution . This would provide the persistence, scalability, and real-time indexing capabilities needed for a production system.
 - **CI/CD for Indexing**: Set up a CI/CD pipeline (e.g., using GitHub Actions) that automatically triggers the re-indexing process whenever the main branch of the Ultralytics repository is updated. This ensures the assistant's knowledge is always current.
 - **Containerization & Deployment**: Dockerize the application (Gradio UI, retrieval logic, API endpoints) and deploy it on a scalable cloud platform like **Google** or **AWS**. This would provide auto-scaling, reliability, and easy management.
-- **Monitoring**: Integrate logging and monitoring tools (e.g., Prometheus, Grafana) to track performance, query latency, and answer quality. 
+- **Monitoring**: Integrate logging and monitoring tools (e.g., Prometheus, Grafana) to track performance, query latency, and answer quality.
 
+
+## Showcases
+
+Here are some real-world examples of how this RAG system has been used to help solve issues in the Ultralytics repository:
+
+### Issue Resolution Examples
+
+1. **Memory Management Issue** - [GitHub Issue #21062](https://github.com/ultralytics/ultralytics/issues/21062)
+   ![Case 1](cases/1.png)
+
+2. **Configuration Problem** - [GitHub Issue #9824](https://github.com/ultralytics/ultralytics/issues/9824)
+   ![Case 2](cases/2.png)
+
+3. **Training Issue** - [GitHub Issue #20953](https://github.com/ultralytics/ultralytics/issues/20953)
+   ![Case 3](cases/3.png)
+
+4. **Multi-part Solution** - [GitHub Issue #21175](https://github.com/ultralytics/ultralytics/issues/21175)
+   ![Case 4 Part 1](cases/4_1.png)
+   ![Case 4 Part 2](cases/4_2.png)
+
+5. **Performance Optimization** - [GitHub Issue #21427](https://github.com/ultralytics/ultralytics/issues/21427)
+   ![Case 5](cases/5.png)
