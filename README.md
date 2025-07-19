@@ -6,6 +6,9 @@ This project is a RAG (Retrieval-Augmented Generation) based code assistant desi
 
 
 
+[![Hugging Face Logo](https://huggingface.co/front/assets/huggingface_logo.svg)](https://huggingface.co/spaces/sayedM/rag_codebase) [Demo APP HuggingFace ](https://huggingface.co/spaces/sayedM/rag_codebase)
+
+
 ## Core Features
 
 - **Gradio Web UI**: An intuitive chat interface for asking questions.
