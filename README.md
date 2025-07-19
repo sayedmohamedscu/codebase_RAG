@@ -121,6 +121,9 @@ Here is a roadmap for improving the assistant and preparing it for a production 
 - **Monitoring**: Integrate logging and monitoring tools (e.g., Prometheus, Grafana) to track performance, query latency, and answer quality.
 
 
+## **Diagram** 
+   ![diagram](cases/diagram.png)
+
 ## Showcases
 
 Here are some real-world examples of how this RAG system has been used to help solve issues in the Ultralytics repository:
