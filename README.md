@@ -133,6 +133,12 @@ Here are some real-world examples of how this RAG system has been used to help s
 
 ### Issue Resolution Examples
 
+this bug solved using the tool 
+
+**Memory Management Issue** - [GitHub Issue #21062](https://github.com/ultralytics/ultralytics/issues/17951)
+   ![solved bug](cases/solved.png)
+
+   
 1. **Memory Management Issue** - [GitHub Issue #21062](https://github.com/ultralytics/ultralytics/issues/21062)
    ![Case 1](cases/1.png)
 
